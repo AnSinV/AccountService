@@ -1,6 +1,8 @@
 server {
-    listen 80;
+    listen 443 ssl;
     server_name auth.${SERVER_HOSTNAME};
+
+    include /etc/nginx/conf.d/ssl-setup.conf;
 
     location / {
         proxy_set_header Host $http_host;
@@ -16,26 +18,5 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_pass http://${ACC_SERVICE_BACKEND_HOST}:${ACC_SERVICE_BACKEND_PORT};
-    }
-}
-
-server {
-    listen 443;
-    server_name auth.${SERVER_HOSTNAME};
-
-    location / {
-        proxy_set_header Host $http_host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_pass https://${ACC_SERVICE_FRONTEND_HOST}:${ACC_SERVICE_FRONTEND_PORT};
-    }
-
-    location /api/ {
-        proxy_set_header Host $http_host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_pass https://${ACC_SERVICE_BACKEND_HOST}:${ACC_SERVICE_BACKEND_PORT};
     }
 }

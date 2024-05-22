@@ -1,5 +1,3 @@
-version: '4'
-
 services:
   acc_frontend:
     ports:
@@ -22,5 +20,5 @@ services:
 
 networks:
   main_network:
-        name: main_network 
-        external: true
+    name: main_network 
+    external: true
